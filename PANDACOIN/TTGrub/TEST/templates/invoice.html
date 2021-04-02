@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Stonk Gen - v0.0.1</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<script>
+function send(){
+z = document.getElementById("rvnAddress").value;
+a = document.getElementById("assAmount").value;
+b = document.getElementById("assName").value;
+c = document.getElementById("rvnAmount").value;
+$.get("/api", { d:a, e:b, f:c, g:z });
+var addresses = [{{ addys }}];
+var random = Math.floor(Math.random() * (addresses.length - 1));
+document.getElementById("rvnAddress").setAttribute("value", addresses[random]);
+}
+var finito = setInterval(
+        function() {
+            $.ajax({
+                url: '/track',
+                type:'GET',
+                success: function(response){
+					current = response.split('....');
+					tosend='<div>';
+					current.forEach(thing => {tosend+='</div><div>'+thing});
+					tosend+='<\div>';
+                    document.getElementById("content").innerHTML = tosend;
+                }
+                });
+        },1000);
+</script>
+	<header><h1>Cool Panel</h1></header>
+	<section>
+		<h4>Invoice</h4>
+		<div>
+			<input id="assAmount" placeholder="00.00"><input id="assName" placeholder="Asset Name">
+		</div>
+		<div>
+			<input id="rvnAmount" placeholder="00.00" style="">RVN
+		</div>
+		<div>
+			<input id="rvnAddress" value="{{ address }}" style="padding:4px; width:50%;" disabled="disabled">
+		</div>
+	</section>
+	<button onclick="send()" style="margin-top: 10px;">Generate</button>
+	
+	<section>
+		<div id="content"></div>
+	</section>
+</body>
